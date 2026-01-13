@@ -1,0 +1,8 @@
+pyproject.toml
+splatpack/__init__.py
+splatpack/cli.py
+splatpack.egg-info/PKG-INFO
+splatpack.egg-info/SOURCES.txt
+splatpack.egg-info/dependency_links.txt
+splatpack.egg-info/entry_points.txt
+splatpack.egg-info/top_level.txt

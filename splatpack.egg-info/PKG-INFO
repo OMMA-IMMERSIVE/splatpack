@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: splatpack
+Version: 0.1.0
+Summary: Batch export photogrammetry ready JPGs from DNG sequences using darktable-cli, then bundle for compute.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
