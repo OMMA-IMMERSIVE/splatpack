@@ -1,0 +1,103 @@
+.TH SPLATPACK 1 "January 2026" "splatpack 0.1.0" "User Commands"
+.SH NAME
+splatpack \- export photogrammetry ready JPGs from DNG sequences using darktable-cli, then bundle results
+.SH SYNOPSIS
+.B splatpack
+.RI [ path ]
+.RI [ options ]
+.SH DESCRIPTION
+.B splatpack
+recursively scans a dataset directory for Digital Negative (DNG) files, exports them to JPEG images
+using
+.B darktable-cli
+and writes a clean "job" bundle under an output directory.
+
+This is designed for workflows where you capture CinemaDNG or other DNG sequences in the field,
+convert them to solver friendly images, then ship the results to a compute box for alignment,
+COLMAP export, Gaussian splatting training, or similar pipelines.
+
+By default, splatpack:
+.IP \(bu 2
+searches for .dng files under the target directory (recursive)
+.IP \(bu 2
+groups DNGs by their parent folder (each folder is treated as a sequence)
+.IP \(bu 2
+exports JPEGs into a timestamped job folder
+.IP \(bu 2
+writes job.json metadata and manifest.txt (list of exported images)
+.IP \(bu 2
+optionally creates a ZIP file for transport
+
+.SH QUICK START
+Run in the dataset folder:
+.PP
+.nf
+splatpack
+.fi
+.PP
+Make a ZIP bundle for transfer:
+.PP
+.nf
+splatpack --zip
+.fi
+.PP
+Apply a darktable style:
+.PP
+.nf
+splatpack --style "splat_neutral" --zip
+.fi
+
+.SH OPTIONS
+.TP
+.I path
+Dataset directory to process. If omitted, defaults to the current directory.
+.TP
+.BR --out " " OUTDIR
+Name of the output folder created inside the dataset directory.
+Default is
+.BR _splatpack .
+.TP
+.BR --style " " NAME
+Optional darktable style name to apply during export.
+If provided, splatpack passes
+.B --style NAME
+to
+.BR darktable-cli .
+.TP
+.BR --quality " " N
+JPEG quality from 1 to 100. Default is 95.
+.TP
+.BR --max-long-edge " " N
+Optional max long edge in pixels. This is applied as a best effort configuration hint to darktable.
+For maximum reliability, include resizing in the darktable style instead.
+.TP
+.BR --zip
+Create a ZIP archive of the job folder.
+.TP
+.BR --job-name " " NAME
+Override the default job name (derived from dataset folder name).
+.TP
+.BR --dry-run
+Print actions without exporting or writing files.
+
+.SH OUTPUTS
+splatpack creates a timestamped job directory under:
+.PP
+.nf
+<dataset>/<out>/<job_name>_<YYYYMMDD_HHMMSS>/
+.fi
+.PP
+Inside the job directory:
+.TP
+.B images/
+Exported JPEG images.
+.TP
+.B manifest.txt
+Absolute or relative paths to exported images (one per line).
+.TP
+.B job.json
+Metadata about this run (counts, settings, timestamps, paths).
+
+If
+.B --zip
+is used, a ZIP file is crea
